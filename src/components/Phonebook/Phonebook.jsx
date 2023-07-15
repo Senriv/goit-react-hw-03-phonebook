@@ -13,7 +13,11 @@ class Phonebook extends React.Component {
   };
 
   formSubmitHandler = data => {
-    if (this.state.contacts.find(contact => contact.name.toLowerCase() === data.name.toLowerCase())) {
+    if (
+      this.state.contacts.find(
+        contact => contact.name.toLowerCase() === data.name.toLowerCase()
+      )
+    ) {
       alert(`${data.name} is already in contacts!`);
       return;
     }
@@ -37,6 +41,19 @@ class Phonebook extends React.Component {
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
   };
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem('contacts'));
+    if (contacts) {
+      this.setState({ contacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   render() {
     const filterContacts = this.filteredContacts();
